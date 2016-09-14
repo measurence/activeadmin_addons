@@ -22,5 +22,14 @@ To enable select2 ajax search functionality you need to do the following:
   search. It **defaults to**: `1`
 * `class`: **(optional)** You can pass extra classes for your field.
 * `multiple`: **(optional)** Set it to true if you need to select few options like tags select
+* You can use *_ids values to make has_many relations concise. You should add attribute_ids override to your model as below;
+```ruby
+  def state_ids=(values)
+    if values.any? && values.first.include?(',')
+      values = values.first.split(',')
+    end
+    super(values)
+  end
+```
 
 <img src="./images/select2-tags.gif" />
