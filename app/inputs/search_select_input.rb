@@ -9,7 +9,15 @@ class SearchSelectInput < Formtastic::Inputs::StringInput
     opts["data-display_name"] = @options[:display_name] || "name"
     opts["data-minimum_input_length"] = @options[:minimum_input_length] || 1
     opts["data-selected"] = relation.try(opts["data-display_name"].to_sym)
-    opts["multiple"] = @options[:multiple] if @options[:multiple].present?
+    if @options[:multiple].present?
+      opts["multiple"] = @options[:multiple]
+      if attributized_method_name.to_s.include?('_ids')
+        relation = @object.send(attributized_method_name.to_s.gsub('_ids', '').pluralize)
+        opts["data-multiple-selected"] = relation.map{|item| {id: item.id, text: item.send(@options[:display_name]) }}.to_json
+      end
+
+    end
+
     super.merge opts
   end
 end

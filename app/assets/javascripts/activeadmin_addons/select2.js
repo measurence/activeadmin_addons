@@ -137,14 +137,27 @@ $(function() {
         containerCssClass: 'nested-select-container',
         minimumInputLength: minimumInputLength,
         initSelection: function(element, callback) {
-          var id = $(element).val();
-          var text = $(element).data('selected') || '';
-          $(element).data('selected', '');
-
-          callback({
-            id: id,
-            text: text
-          });
+          
+          if ($(element).attr('multiple')) {
+            var multiple_values = $(element).attr('data-multiple-selected') || '';
+            $(element).attr('data-multiple-selected', '');
+            multiple_values = JSON.parse(multiple_values);
+            callback(multiple_values)
+            // $.each(multiple_values, function (i, value) {
+            //   debugger;
+            //   // callback({"text": value.text, "id": value.id});
+            // });
+          }
+          else {
+            var id = $(element).val();
+            var text = $(element).attr('data-selected') || '';
+            $(element).attr('data-selected', '');
+            
+            callback({
+              id: id,
+              text: text
+            });
+          }
         }
       };
 
